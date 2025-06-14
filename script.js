@@ -4,6 +4,7 @@ let timerId = null;
 const minutesDisplay = document.getElementById('minutes');
 const secondsDisplay = document.getElementById('seconds');
 const toggleBtn = document.getElementById('toggleBtn');
+const resetBtn = document.getElementById('resetBtn');
 const btnText = toggleBtn.querySelector('.btn-text');
 
 function updateDisplay() {
@@ -39,8 +40,10 @@ function stopTimer() {
 }
 
 function resetTimer() {
+    stopTimer();
     timeLeft = 25 * 60;
     updateDisplay();
+    updateButtonState();
 }
 
 function updateButtonState() {
@@ -53,7 +56,7 @@ function updateButtonState() {
     }
 }
 
-// Event listener for toggle button
+// Event listeners
 toggleBtn.addEventListener('click', () => {
     if (timerId === null) {
         startTimer();
@@ -61,6 +64,8 @@ toggleBtn.addEventListener('click', () => {
         stopTimer();
     }
 });
+
+resetBtn.addEventListener('click', resetTimer);
 
 // Initial display
 updateDisplay(); 
