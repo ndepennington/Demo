@@ -3,8 +3,8 @@ let timerId = null;
 
 const minutesDisplay = document.getElementById('minutes');
 const secondsDisplay = document.getElementById('seconds');
-const startBtn = document.getElementById('startBtn');
-const stopBtn = document.getElementById('stopBtn');
+const toggleBtn = document.getElementById('toggleBtn');
+const btnText = toggleBtn.querySelector('.btn-text');
 
 function updateDisplay() {
     const minutes = Math.floor(timeLeft / 60);
@@ -15,9 +15,8 @@ function updateDisplay() {
 }
 
 function startTimer() {
-    if (timerId !== null) return; // Prevent multiple timers
+    if (timerId !== null) return;
     
-    startBtn.disabled = true;
     timerId = setInterval(() => {
         timeLeft--;
         updateDisplay();
@@ -26,14 +25,17 @@ function startTimer() {
             stopTimer();
             alert('Time is up!');
             resetTimer();
+            updateButtonState();
         }
     }, 1000);
+    
+    updateButtonState();
 }
 
 function stopTimer() {
     clearInterval(timerId);
     timerId = null;
-    startBtn.disabled = false;
+    updateButtonState();
 }
 
 function resetTimer() {
@@ -41,11 +43,23 @@ function resetTimer() {
     updateDisplay();
 }
 
-// Event listeners
-startBtn.addEventListener('click', startTimer);
-stopBtn.addEventListener('click', () => {
-    stopTimer();
-    resetTimer();
+function updateButtonState() {
+    if (timerId !== null) {
+        toggleBtn.classList.add('running');
+        btnText.textContent = 'Pause';
+    } else {
+        toggleBtn.classList.remove('running');
+        btnText.textContent = 'Start';
+    }
+}
+
+// Event listener for toggle button
+toggleBtn.addEventListener('click', () => {
+    if (timerId === null) {
+        startTimer();
+    } else {
+        stopTimer();
+    }
 });
 
 // Initial display
